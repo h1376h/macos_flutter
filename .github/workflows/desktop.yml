@@ -88,7 +88,7 @@ jobs:
       
       - name: Compress build for macOS
         if: matrix.target == 'macOS'
-        run: ditto -c -k --sequesterRsrc --keepParent test.app $GITHUB_WORKSPACE/test_${{ matrix.target }}.zip
+        run: ditto -c -k --sequesterRsrc --keepParent macos_flutter.app $GITHUB_WORKSPACE/test_${{ matrix.target }}.zip
         working-directory: ${{ matrix.build_path }}
       
       - name: Compress build for Windows
