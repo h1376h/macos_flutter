@@ -1,0 +1,51 @@
+name: Upload Desktop
+
+on:
+  # Enable manual run
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Tag to create (e.g. v1.0.0). Must include 'v' and must match pubspec"
+        required: true
+        default: "v1.0.0"
+        type: string
+    
+jobs:
+  build:
+    # This job will run on ubuntu virtual machine
+    runs-on: ubuntu-latest
+    steps:
+    
+    # Setup Java environment in order to build the Android app.
+    - uses: actions/checkout@v3.5.3
+
+    - uses: dsaltares/fetch-gh-release-asset@master
+      with:
+        repo: 'h1376h/macos_flutter'
+        version: 'tags/${{ github.event.inputs.version }}'
+        file: 'macOS_${{ github.event.inputs.version }}.zip'
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    # Upload test.tar.gz to user
+    - uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: macOS
+        document: './macOS_${{ github.event.inputs.version }}.zip'
+        
+    - uses: dsaltares/fetch-gh-release-asset@master
+      with:
+        repo: 'h1376h/macos_flutter'
+        version: 'tags/${{ github.event.inputs.version }}'
+        file: 'Windows_${{ github.event.inputs.version }}.zip'
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    # Upload test.tar.gz to user
+    - uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: Windows
+        document: './Windows_${{ github.event.inputs.version }}.zip'
+    
