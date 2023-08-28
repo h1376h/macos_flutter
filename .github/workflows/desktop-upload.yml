@@ -17,7 +17,7 @@ jobs:
     steps:
     
     # Setup Java environment in order to build the Android app.
-    - uses: actions/checkout@v3.5.3
+    - uses: actions/checkout@v3.6.0
 
     - uses: dsaltares/fetch-gh-release-asset@master
       with:
